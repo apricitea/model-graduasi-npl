@@ -47,103 +47,110 @@ st.write("Input data terkait Debitur yang ingin diprediksi apakah akan NPL/tidak
 
 # User input for features
 st.markdown('#### Wilayah Debitur')
-wilayah = st.selectbox('', ['Wilayah 1', 'Wilayah 2', 'Wilayah 3', 'Wilayah 4', 'Wilayah 5', 'Wilayah 6'], index=0)
+wilayah = st.selectbox('', ['Sumatera', 'Jawa', 'Bali & Nusa Tenggara', 'Kalimantan', 'Sulawesi', 'Maluku & Papua'], index=0)
 st.write(f"Debitur berada di {wilayah}")
-wilayah_features = {
-    'dummy.wilayah.1': 0,
-    'dummy.wilayah.3': 0,
-    'dummy.wilayah.4': 0,
-    'dummy.wilayah.5': 0,
-    'dummy.wilayah.6': 0
-}
-if wilayah == 'Wilayah 1':
+wilayah_features = {'dummy.wilayah.1': 0,'dummy.wilayah.3': 0,'dummy.wilayah.4': 0,'dummy.wilayah.5': 0,'dummy.wilayah.6': 0}
+if wilayah == 'Sumatera':
     wilayah_features['dummy.wilayah.1'] = 1
-elif wilayah == 'Wilayah 3':
+elif wilayah == 'Bali & Nusa Tenggara':
     wilayah_features['dummy.wilayah.3'] = 1
-elif wilayah == 'Wilayah 4':
+elif wilayah == 'Kalimantan':
     wilayah_features['dummy.wilayah.4'] = 1
-elif wilayah == 'Wilayah 5':
+elif wilayah == 'Sulawesi':
     wilayah_features['dummy.wilayah.5'] = 1
-elif wilayah == 'Wilayah 6':
+elif wilayah == 'Maluku & Papua':
     wilayah_features['dummy.wilayah.6'] = 1
 
 st.markdown('#### Apakah usaha Debitur sudah memiliki NIB (Nomor Izin Berusaha) atau SKU (Surat Keterangan Usaha)?')
-p05_coded = st.selectbox('', ['Sudah', 'Belum'], index=0)
+p05_coded = st.selectbox('', ['Sudah', 'Dalam proses pembuatan', 'Belum'], index=0)
 st.write(f"Debitur {p05_coded} memiliki NIB atau SKU")
-p05_coded = 1 if p05_coded == 'Sudah' else 0
+p05_coded = 2 if p05_coded == 'Sudah' else 1
 
 st.markdown('#### Berapa banyaknya karyawan yang aktif di Usaha Debitur saat ini?')
-p08 = st.number_input('', min_value=0, max_value=100, value=25, key='p08')
+p08 = st.number_input('', min_value=0, max_value=10000, value=2, key='p08')
 st.write(f"Jumlah karyawan di usaha debitur adalah sebanyak: {p08} orang")
 
 st.markdown('#### Berapa jumlah tanggungan (di luar keluarga inti seperti anak dan istri) Debitur saat ini?')
-p20 = st.number_input('', min_value=0, max_value=100, value=5, key='p20')
+p20 = st.number_input('', min_value=0, max_value=100, value=2, key='p20')
 st.write(f"Jumlah tanggungan Debitur saat ini adalah sebanyak: {p20} orang")
 
 st.markdown('#### Apa Lapangan usaha pekerajaan utama Debitur?')
-p26_coded = st.selectbox('', ['Ya', 'Tidak'], index=0)
-st.write(f"Debitur {p26_coded} memiliki pekerjaan tetap")
-p26_coded = 1 if p26_coded == 'Ya' else 0
+p26_coded = st.selectbox('', [
+    'Industri pengolahan', 
+    'Jasa-jasa (konstruksi, pengangkutan, akomodasi)', 
+    'Pertanian (tanaman pangan, perkebunan, peternakan, perikanan, kehutanan), dan Pertambangan',
+    'Perdagangan besar dan eceran',
+    'Lainnya'], index=0)
+st.write(f"Lapangan usaha pekerjaan utama Debitur adalah: {p26_coded}")
+p26_coded = 1 if p26_coded == 'Pertanian (tanaman pangan, perkebunan, peternakan, perikanan, kehutanan), dan Pertambangan' else 2
 
-st.markdown('#### Berapa pengeluaran per bulan debitur (dalam ribuan)?')
-p30 = st.number_input('', min_value=0, max_value=100000, value=5000, key='p30')
-st.write(f"Pengeluaran per bulan debitur adalah sebesar: Rp {(p30 * 1000):,}".replace(',', '.'))
+st.markdown('#### Berapa lama Debitur telah bekerja sejak dari pekerjaan pertama sampai dengan pekerjaan terakhir saat ini (dalam tahun)?')
+p30 = st.number_input('', min_value=0, max_value=100, value=5000, key='p30')
+st.write(f"Debitur telah bekerja selama: {p30} tahun")
 
-st.markdown('#### Apakah Debitur memiliki riwayat kredit buruk?')
-p32_1_coded = st.selectbox('', ['Ya', 'Tidak'], index=0)
-st.write(f"Debitur {p32_1_coded} memiliki riwayat kredit buruk")
-p32_1_coded = 1 if p32_1_coded == 'Ya' else 0
+st.markdown('#### Berapa rata-rata pendapatan bersih per bulan Debitur dari Pekerjaan utama?')
+p32_1_coded = st.number_input('', min_value=0, max_value=1000000000, value=1, key='p32_1')
+st.write(f"Rata-rata pendapatan bersih per bulan Debitur adalah sebesar: Rp {p32_1_coded}".replace(',', '.'))
 
-st.markdown('#### Apakah Debitur memiliki agunan?')
-p33_coded = st.selectbox('', ['Ya', 'Tidak'], index=0)
-st.write(f"Debitur {p33_coded} memiliki agunan")
-p33_coded = 1 if p33_coded == 'Ya' else 0
+st.markdown('#### Berapa rata-rata Pengeluaran per bulan Debitur (diluar angsuran dan tabungan)?')
+p33_coded = st.number_input('', min_value=0, max_value=1000000000, value=1, key='p32_1')
+st.write(f"Rata-rata Pengeluaran per bulan Debitur adalah sebesar: Rp {p33_coded}".replace(',', '.'))
 
-st.markdown('#### Berapa rata-rata biaya listrik rumah tinggal Debitur (dalam ribuan)?')
-p37 = st.number_input('', min_value=0, max_value=10000, value=10, key='p37')
-st.write(f"Rata-rata biaya listrik rumah tinggal Debitur adalah sebesar: Rp {(p37 * 1000):,}".replace(',', '.'))
+st.markdown('#### Berapa rata-rata biaya atau pembayaran listrik rumah tinggal Debitur per bulan (dalam ribuan)?')
+p37 = st.number_input('', min_value=0, max_value=1000000000, value=1, key='p37')
+st.write(f"Rata-rata biaya atau pembayaran listrik rumah tinggal Debitur per bulan adalah sebesar: Rp {(p37 * 1000):,}".replace(',', '.'))
 
-st.markdown('#### Berapa jangka waktu pinjaman atau tenornya (dalam bulan)?')
+st.markdown('#### Berapa jangka waktu pinjaman atau tenor Debitur (dalam bulan)?')
 p48 = st.number_input('', min_value=0, max_value=100, value=12, key='p48')
 st.write(f"Jangka waktu pinjaman debitur adalah selama: {p48} bulan")
 
-st.markdown('#### Berapa suku bunga pinjamannya (dalam % per tahun)?')
+st.markdown('#### Berapa suku bunga pinjaman Debitur (dalam % per tahun)?')
 p49 = st.number_input('', min_value=0, max_value=100, value=1, key='p49')
 st.write(f"Suku bunga pinjaman debitur adalah sebesar: {p49}% per tahun")
 
-st.markdown('#### Apakah Debitur memiliki asuransi kredit?')
-p51_coded = st.selectbox('', ['Ya', 'Tidak'], index=0)
-st.write(f"Debitur {p51_coded} memiliki asuransi kredit")
-p51_coded = 1 if p51_coded == 'Ya' else 0
+st.markdown('#### Dengan pendapatan bersih dari pekerjaan utama, apakah Debitur mampu membayar angsuran?')
+p51_coded = st.selectbox('', ['Mampu', 'Kurang mampu', 'Tidak mampu'], index=0)
+st.write(f"Debitur {p51_coded} membayar angsuran dengan penghasilan dari pekerjaan utama")
+p51_coded = 1 if p51_coded == 'Mampu' else 2
 
-st.markdown('#### Apakah Debitur memiliki pinjaman lain?')
-p54_coded = st.selectbox('', ['Ya', 'Tidak'], index=0)
-st.write(f"Debitur {p54_coded} memiliki pinjaman lain")
-p54_coded = 1 if p54_coded == 'Ya' else 0
+st.markdown('#### Apa alasan Debitur berganti jenis pinjaman dari KUR ke Kupedes/Pinjaman Komersial?')
+p54_coded = st.selectbox('', [
+    '',
+    'Atas saran/arahan dari mantri', 
+    'Kebutuhan dana lebih besar dari plafon KUR yang tersedia', 
+    'Terpaksa karena KUR tidak tersedia',
+    'Usaha berkembang dan sudah mampu meminjam pinjaman komersial',
+    'Lainnya'], index=0)
+st.write(f"Alasan Debitur berganti jenis pinjaman dari KUR ke Kupedes/Pinjaman Komersial adalah: {p54_coded}")
+p54_coded = 1 if p54_coded in ['Kebutuhan dana lebih besar dari plafon KUR yang tersedia','Usaha berkembang dan sudah mampu meminjam pinjaman komersial'] else 0
 
 st.markdown('#### Apakah Debitur pernah menunggak angsuran pinjaman sebelumnya?')
-p56_1_coded = st.selectbox('', ['Ya', 'Tidak'], index=0)
-st.write(f"Debitur {p56_1_coded} pernah menunggak angsuran pinjaman sebelumnya")
-p56_1_coded = 1 if p56_1_coded == 'Ya' else 0
+p56_1_coded = st.selectbox('', ['Pernah', 'Tidak pernah'], index=0)
+st.write(f"Debitur {p56_1_coded} menunggak angsuran pinjaman sebelumnya")
+p56_1_coded = 2 if p56_1_coded == 'Pernah' else 1
 
-st.markdown('#### Berapa banyak pinjaman yang sedang berjalan?')
-p56_2 = st.number_input('', min_value=0, max_value=10, value=1, key='p56_2')
-st.write(f"Debitur memiliki {p56_2} pinjaman yang sedang berjalan")
+st.markdown('#### Berapa kali Debitur pernah menunggak/tdk membayar angsuran?')
+p56_2 = st.number_input('', min_value=0, max_value=100, value=1, key='p56_2')
+st.write(f"Debitur menunggak angsuran sebanyak: {p56_2} kali")
 
-st.markdown('#### Apakah Debitur memiliki riwayat gangguan kesehatan?')
-p58_1_coded = st.selectbox('', ['Ya', 'Tidak'], index=0)
-st.write(f"Debitur {p58_1_coded} memiliki riwayat gangguan kesehatan")
-p58_1_coded = 1 if p58_1_coded == 'Ya' else 0
+st.markdown('#### Sejak pencairan pinjaman, apakah Debitur pernah mengajukan perpanjangan jangka waktu pinjaman?')
+p58_1_coded = st.selectbox('', ['Pernah', 'Tidak pernah'], index=0)
+st.write(f"Debitur {p58_1_coded} mengajukan perpanjangan jangka waktu pinjaman")
+p58_1_coded = 2 if p58_1_coded == 'Pernah' else 1
 
 st.markdown('#### Apakah Debitur pernah mengajukan penambahan jumlah pinjaman sebelum jatuh tempo (suplesi)?')
-p60_1_coded = st.selectbox('', ['Ya', 'Tidak'], index=0)
+p60_1_coded = st.selectbox('', ['Pernah', 'Tidak pernah'], index=0)
 st.write(f"Debitur {p60_1_coded} mengajukan penambahan jumlah pinjaman sebelum jatuh tempo")
-p60_1_coded = 1 if p60_1_coded == 'Ya' else 0
+p60_1_coded = 2 if p60_1_coded == 'Pernah' else 1
 
-st.markdown('#### Apakah Debitur memiliki tanggungan keluarga?')
-p68_1_coded = st.selectbox('', ['Ya', 'Tidak'], index=0)
-st.write(f"Debitur {p68_1_coded} memiliki tanggungan keluarga")
-p68_1_coded = 1 if p68_1_coded == 'Ya' else 0
+st.markdown('#### Bagaimanakah rata-rata penjualan atau omset usaha Debitur saat ini dibandingkan dengan sebelum pandemi Covid-19 (tahun 2019)?')
+p68_1_coded = st.selectbox('', [
+    'Masih dibawah rata-rata sebelum pandemi',
+    'Sama dengan rata-rata sebelum pandemi', 
+    'Sudah diatas rata-rata sebelum pandemi', 
+    'Tidak relevan'], index=0)
+st.write(f"Rata-rata penjualan atau omset usaha Debitur saat ini {p68_1_coded}")
+p68_1_coded = 1 if p68_1_coded == 'Sudah diatas rata-rata sebelum pandemi' else 0
 
 # Create a dictionary of the input features
 input_features = {
