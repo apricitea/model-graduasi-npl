@@ -85,7 +85,7 @@ st.write(f"Lapangan usaha pekerjaan utama Debitur adalah: {p26_coded}")
 p26_coded = 1 if p26_coded == 'Pertanian (tanaman pangan, perkebunan, peternakan, perikanan, kehutanan), dan Pertambangan' else 2
 
 st.markdown('#### Berapa lama Debitur telah bekerja sejak dari pekerjaan pertama sampai dengan pekerjaan terakhir saat ini (dalam tahun)?')
-p30 = st.number_input('', min_value=0, max_value=100, value=5000, key='p30')
+p30 = st.number_input('', min_value=0, max_value=100, value=1, key='p30')
 st.write(f"Debitur telah bekerja selama: {p30} tahun")
 
 st.markdown('#### Berapa rata-rata pendapatan bersih per bulan Debitur dari Pekerjaan utama?')
@@ -101,7 +101,7 @@ p37 = st.number_input('', min_value=0, max_value=1000000000, value=1, key='p37')
 st.write(f"Rata-rata biaya atau pembayaran listrik rumah tinggal Debitur per bulan adalah sebesar: Rp {(p37 * 1000):,}".replace(',', '.'))
 
 st.markdown('#### Berapa jangka waktu pinjaman atau tenor Debitur (dalam bulan)?')
-p48 = st.number_input('', min_value=0, max_value=100, value=12, key='p48')
+p48 = st.number_input('', min_value=0, max_value=100, value=1, key='p48')
 st.write(f"Jangka waktu pinjaman debitur adalah selama: {p48} bulan")
 
 st.markdown('#### Berapa suku bunga pinjaman Debitur (dalam % per tahun)?')
