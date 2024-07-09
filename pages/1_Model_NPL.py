@@ -137,4 +137,4 @@ input_features = {
 # Prediction button
 if st.button('Buat Prediksi'):
     probability = predict(input_features, coefficients_npl)
-    st.markdown(f"#### Berdasarkan Model Regresi Logistik, peluang Debitur tersebut untuk NPL adalah: {(probability * 100):.2f}%. Besar kemungkinannya, Debitur tersebut akan {'NPL' if probability > 0.5 else 'PL'}.")
+    st.markdown(f"#### Berdasarkan Model Regresi Logistik, probabilitas Debitur tersebut untuk NPL adalah: {(probability * 100):.2f}%. Besar kemungkinannya, Debitur tersebut akan {'NPL' if probability > 0.5 else 'PL'}.")
